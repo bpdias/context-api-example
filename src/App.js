@@ -1,26 +1,58 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-class App extends Component {
+// Creating a context 
+const MyContext = React.createContext();
+
+// Creating a provider Component
+class MyProvider extends Component{
+  state = {
+    name: "Truck",
+    cool: true
+  }
+
+  render(){
+    return (
+      <MyContext.Provider value={{
+        state: this.state
+      }}>
+        {this.props.children}
+      </MyContext.Provider>
+    )
+  }
+}
+
+
+const Factory = (props) => (
+  <div className='factory'>
+    <Car />
+  </div>
+)
+
+class Car extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className='car'>
+        <MyContext.Consumer>
+          {(context) => (
+            <p>{context.state.name}</p>
+          )}  
+        </MyContext.Consumer>
       </div>
+    )
+  }
+}
+
+class App extends Component {  
+  render() {
+    return (
+      <MyProvider>
+        <div className="App">
+          <p>
+            I'm the contextApi exemple
+          </p>
+          <Factory />
+        </div>
+      </MyProvider>
     );
   }
 }
